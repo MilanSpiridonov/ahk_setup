@@ -25,26 +25,23 @@
 !ESC::!f4          ; Alt+Esc sends the Alt+F4 key combination.
 !/::^/		 ; Comments out line in normal IDEs, *Chough*, *Cough* VS
 !q::Run "C:\Program Files\Mozilla Firefox\firefox.exe https://excalidraw.com/"
-;#!i::{
-;Loop 3
-;	{
-;	   Send "{Up}"
-;	}
-;}
-;#!k::{
-;Loop 3
-;{
-;Send "{Down}"
-;}
-;}
 
-;These work, now try doing vim-like controls, with ![NUMBER][S/W]
+!^i::			 ; Go up 5 lines
+{
+ 	Send "{Up 5}"
+}
 
-;!w::{
-;Send "{Up, 3}"
-;!s::{
-;	Loop 3
-;	{
-;	   Send "{Down}"
-;	}
+
+!^k::			 ; Go down 5 lines
+{
+	Send "{Down 5}"
+}
+
+!^,::+Home
+!^.::+End
+
+
+;!^;::{
+;	Send "{Home}+{End}"
+;	Send "{!x}"
 ;}
