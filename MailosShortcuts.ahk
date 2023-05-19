@@ -21,27 +21,24 @@
 !x::^x ; Alt+X sends the Ctrl+X key combination.
 !e::Run "Explorer" ; Alt+E opens File Explorer.
 !r::Run "Notepad" ; Alt+R opens Notepad.
-;!t::Run "C:\WINDOWS\system32\cmd.exe" ; Alt+T opens a Command Prompt window in the C:\ directory.
 !ESC::!f4 ; Alt+Esc sends the Alt+F4 key combination.
 !/::^/		 ; Comments out line in normal IDEs, *Chough*, *Cough* VS
 !q::Run "C:\Program Files\Mozilla Firefox\firefox.exe https://excalidraw.com/"
 
-;!^k::			 ; Go down 5 lines
-;{
-;	Send "{Down 5}"
-;}
 
 !^,::+Home
 !^.::+End
 
-;!^;::{
-;	Send "{Home}+{End}"
-;	Send "{!x}"
-;}
-
 !^n::{
     SendInput "^{Right}"
     SendInput "^+{Left}"
+    SendInput "^{x}"
+}
+!^m::{
+    SendInput "{End}"
+    SendInput "+{Home}"
+    SendInput "^{x}"
+    SendInput "{Backspace}"
 }
 
 3::3
@@ -76,21 +73,19 @@ MoveCursorDown(Count) {
     }
 }
 
-^g::{
+; ^g::{
 
-    MsgBox "The active window is '" WinGetID("A") "'."
+;     MsgBox "The active window is '" WinGetID("A") "'."
 
-    MsgBox "Tittle is '" WinGetProcessName("A") "'."
-}
+;     MsgBox "Tittle is '" WinGetProcessName("A") "'."
+; }
 
 !t::{
     currWindow :=  WinGetProcessName("A")
-    MsgBox currWindow
-    for n, ctrl in WinGetControls("A")
-    {
-        res := ControlGetText(ctrl, WinGetTitle("A"))
-        if(ctrl = "ToolbarWindow324"){
-            finalStr := ""
+    ;shift alt c
+    if(currWindow = "explorer.exe"){
+        res := ControlGetText("ToolbarWindow324", WinGetTitle("A"))
+        finalStr := ""
             dist := StrSplit(res,' ')
             for w, s in dist{
                 if(w != 1){
@@ -108,6 +103,13 @@ MoveCursorDown(Count) {
             finalCmd := "C:\\WINDOWS\\system32\\cmd.exe /K cd " . newPath
             ; MsgBox finalCmd
             Run finalCmd
+    }
+    else{
+        if(currWindow = "code.exe"){
+            SendInput "^+{c}"
+        }
+        else{
+            Run "C:\WINDOWS\system32\cmd.exe /K cd C://"
         }
     }
 }
