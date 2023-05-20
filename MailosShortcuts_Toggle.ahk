@@ -287,6 +287,14 @@ Alt::
             SendInput "s"
         }
     }
+    $^s::{
+        if(edit_mode){
+            SendInput "{PrintScreen}"
+        }
+        else{
+            SendInput "^{s}"
+        }
+    }
 
     $c::{
         if (edit_mode){
