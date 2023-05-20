@@ -4,12 +4,26 @@ MyGui := Gui()
 vertical_buffer := 0
 ; Create a hotkey that listens for the Alt key press
 
-MakeGui(){
+SetTimer WatchCursor, 500
 
+show_gui := True
+MakeGui()
+WatchCursor()
+{
+    MouseGetPos &xpos, &ypos 
+    if(xpos < 150 && ypos < 80){
+        MyGui.Move(-200, -200, 100, 50)
+    }
+    else{
+        MyGui.Move(10, 20, 100, 50)
+    }
+}
+MakeGui(){
     currWindow := WinGetTitle("A")
     MyGui.Destroy()
     global MyGui := Gui()
-    MyGui.Opt("+AlwaysOnTop -Caption")
+    MyGui.Opt("+ToolWindow +LastFound +AlwaysOnTop -Caption")
+   
     if(edit_mode){
         MyGui.Add("Text",, "Edit Mode")
         MyGui.BackColor := "EEAA99"
@@ -27,14 +41,10 @@ MakeGui(){
     {
         WinActivate
     }
-    ; SendInput "{Esc}"
 }
+
 Alt::
     {
-
-        ; MyGui.Destroy()
-        ; global MyGui := Gui()
-
         if(edit_mode = False){
             global edit_mode := True
         }
@@ -167,7 +177,7 @@ Alt::
         }
         else{
             SendText "N"
-        } 
+        }
     }
     $n::{
         if (edit_mode){
@@ -183,14 +193,14 @@ Alt::
         }
         else{
             SendText "M"
-        } 
+        }
     }
     $m::{
         if (edit_mode){
             SendInput "^{Right}"
         }
         else{
-            SendInput "m"
+            SendInput "{m}"
         }
     }
 
@@ -248,7 +258,7 @@ Alt::
             SendInput "^f"
         }
         else{
-            SendInput "f"
+            SendInput "{f}"
         }
     }
 
@@ -301,7 +311,7 @@ Alt::
             SendInput "^c"
         }
         else{
-            SendInput "c"
+            SendInput "{c}"
         }
     }
 
@@ -416,7 +426,7 @@ $7::{
 }
 $8::{
     if (edit_mode){
-       SendInput "{PgUp}"
+        SendInput "{PgUp}"
     }
     else{
         SendInput "{8}"
@@ -424,7 +434,7 @@ $8::{
 }
 $9::{
     if (edit_mode){
-       SendInput "{PgDn}"
+        SendInput "{PgDn}"
     }
     else{
         SendInput "{9}"
