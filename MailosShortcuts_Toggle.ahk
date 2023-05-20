@@ -2,8 +2,8 @@
 edit_mode := False
 MyGui := Gui()
 ; Create a hotkey that listens for the Alt key press
-*Alt::
-    {
+Alt::
+{
         currWindow := WinGetTitle("A")
 
         MyGui.Destroy()
@@ -80,7 +80,7 @@ MyGui := Gui()
         }
     }
 
-    m::{
+    $m::{
         if (edit_mode){
             SendInput "^{Righ}"
         }
@@ -138,12 +138,12 @@ MyGui := Gui()
             SendText "."
         }
     }
-    f::{
+    $f::{
         if (edit_mode){
             SendInput "^f"
         }
         else{
-            SendText "f"
+	      SendInput "f"
         }
     }
 
