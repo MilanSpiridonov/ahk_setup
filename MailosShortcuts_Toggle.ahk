@@ -1,141 +1,246 @@
 ﻿; Define the initial state of the toggle variable
 edit_mode := False
 MyGui := Gui()
+vertical_buffer := 0
 ; Create a hotkey that listens for the Alt key press
-Alt::
-{
-        currWindow := WinGetTitle("A")
 
-        MyGui.Destroy()
-        global MyGui := Gui()
-        MyGui.Opt("+AlwaysOnTop -Caption")
+MakeGui(){
+
+    currWindow := WinGetTitle("A")
+    MyGui.Destroy()
+    global MyGui := Gui()
+    MyGui.Opt("+AlwaysOnTop -Caption")
+    if(edit_mode){
+        MyGui.Add("Text",, "Edit Mode")
+        MyGui.BackColor := "EEAA99"
+        MyGui.Title := "Edit Mode"
+        MyGui.Add("Text",, vertical_buffer)
+    }
+    else{
+        MyGui.Add("Text",, "Text Mode")
+        MyGui.Title := "Text Mode"
+        MyGui.BackColor := "0048ba"
+    }
+    MyGui.Show()
+    MyGui.Move(10, 20, 100, 50)
+    if WinExist(currWindow)
+    {
+        WinActivate
+    }
+    ; SendInput "{Esc}"
+}
+Alt::
+    {
+
+        ; MyGui.Destroy()
+        ; global MyGui := Gui()
 
         if(edit_mode = False){
             global edit_mode := True
-            MyGui.Add("Text",, "Edit Mode")
-            MyGui.BackColor := "EEAA99"
-            MyGui.Title := "Edit Mode"
         }
         else{
             global edit_mode := False
-            MyGui.Add("Text",, "Text Mode")
-            MyGui.Title := "Text Mode"
-            MyGui.BackColor := "0048ba"
+            global vertical_buffer := 0
         }
+        MakeGui()
 
         ScreenWidth := A_ScreenWidth
         ScreenHeight := A_ScreenHeight
-       
-      
-        MyGui.Show
-        MyGui.Move(10, 20, 100, 50)
-        if WinExist(currWindow)
-        {
-            WinActivate
-        }
-        SendInput "{Esc}"
     }
-    j::{
+    +j::{
+        if (edit_mode){
+            SendInput "+{Left}"
+        }
+        else{
+            SendText "J"
+        }
+    }
+    $j::{
         if (edit_mode){
             SendInput "{Left}"
         }
         else{
-            SendText "j"
+            SendInput "j"
         }
     }
 
-    l::{
+    +l::{
         if (edit_mode){
-            SendInput "{Right}"
+            SendInput "+{Right}"
         }
         else{
-            SendText "l"
+            SendText "L"
         }
     }
-
-    i::{
+    $l::{
         if (edit_mode){
-            SendInput "{Up}"
+            if GetKeyState("Shift"){
+                SendInput "+{Right}"
+            }
+            else{
+                SendInput "{Right}"
+            }
+
         }
         else{
-            SendText "i"
+            SendInput "l"
         }
     }
-
-    k::{
+    +i::{
         if (edit_mode){
-            SendInput "{Down}"
+            if(vertical_buffer = 0 || vertical_buffer = 1){
+                SendInput "+{Up}"
+                global vertical_buffer := 0
+            }
+            else{
+                Loop vertical_buffer{
+                    SendInput "+{Up}"
+                }
+                global vertical_buffer := 0
+                MakeGui()
+            }
         }
         else{
-            SendText "k"
+            SendText "I"
+        }
+    }
+    $i::{
+        if (edit_mode){
+            if(vertical_buffer = 0 || vertical_buffer = 1){
+                SendInput "{Up}"
+                global vertical_buffer := 0
+            }
+            else{
+                Loop vertical_buffer{
+                    SendInput "{Up}"
+                }
+                global vertical_buffer := 0
+                MakeGui()
+            }
+
+        }
+        else{
+            SendInput "i"
+        }
+
+    }
+    +k::{
+        if (edit_mode){
+            if(vertical_buffer = 0 || vertical_buffer = 1){
+                SendInput "+{Down}"
+                global vertical_buffer := 0
+            }
+            else{
+                Loop vertical_buffer{
+                    SendInput "+{Down}"
+                }
+                global vertical_buffer := 0
+                MakeGui()
+            }
+        }
+        else{
+            SendText "K"
+        }
+    }
+    $k::{
+        if (edit_mode){
+            if(vertical_buffer = 0 || vertical_buffer = 1){
+                SendInput "{Down}"
+                global vertical_buffer := 0
+            }
+            else{
+                Loop vertical_buffer{
+                    SendInput "{Down}"
+                }
+                global vertical_buffer := 0
+                MakeGui()
+            }
+        }
+        else{
+            SendInput "k"
         }
     }
 
-    n::{
+    +n::{
+        if (edit_mode){
+            SendInput "^+{Left}"
+        }
+        else{
+            SendText "N"
+        } 
+    }
+    $n::{
         if (edit_mode){
             SendInput "^{Left}"
         }
         else{
-            SendText "n"
+            SendInput "n"
         }
     }
-
-    $m::{
+    +m::{
         if (edit_mode){
-            SendInput "^{Righ}"
+            SendInput "^+{Right}"
         }
         else{
-            SendText "m"
+            SendText "M"
+        } 
+    }
+    $m::{
+        if (edit_mode){
+            SendInput "^{Right}"
+        }
+        else{
+            SendInput "m"
         }
     }
 
-    o::{
+    $o::{
         if (edit_mode){
             SendInput "{Delete}"
         }
         else{
-            SendText "o"
+            SendInput "o"
         }
     }
 
-    u::{
+    $u::{
         if (edit_mode){
             SendInput "{Backspace}"
         }
         else{
-            SendText "u"
+            SendInput "u"
         }
     }
-    `;::{
+    $`;::{
         if (edit_mode){
             SendInput "^{Delete}"
         }
         else{
-            SendText ";"
+            SendInput ";"
         }
     }
-    h::{
+    $h::{
         if (edit_mode){
             SendInput "^{Backspace}"
         }
         else{
-            SendText "h"
+            SendInput "h"
         }
     }
-    ,::{
+    $,::{
         if (edit_mode){
             SendInput "{Home}"
         }
         else{
-            SendText ","
+            SendInput ","
         }
     }
-    .::{
+    $.::{
         if (edit_mode){
             SendInput "{End}"
         }
         else{
-            SendText "."
+            SendInput "."
         }
     }
     $f::{
@@ -143,79 +248,79 @@ Alt::
             SendInput "^f"
         }
         else{
-	      SendInput "f"
+            SendInput "f"
         }
     }
 
-    z::{
+    $z::{
         if (edit_mode){
             SendInput "^z"
         }
         else{
-            SendText "z"
+            SendInput "z"
         }
     }
 
-    y::{
+    $y::{
         if (edit_mode){
             SendInput "^y"
         }
         else{
-            SendText "y"
+            SendInput "y"
         }
     }
 
-    a::{
+    $a::{
         if (edit_mode){
             SendInput "^a"
         }
         else{
-            SendText "a"
+            SendInput "a"
         }
     }
 
-    s::{
+    $s::{
         if (edit_mode){
             SendInput "^s"
         }
         else{
-            SendText "s"
+            SendInput "s"
         }
     }
 
-    c::{
+    $c::{
         if (edit_mode){
             SendInput "^c"
         }
         else{
-            SendText "c"
+            SendInput "c"
         }
     }
 
-    v::{
+    $v::{
         if (edit_mode){
             SendInput "^v"
         }
         else{
-            SendText "v"
+            SendInput "v"
         }
     }
 
-    b::{
+    $b::{
         if (edit_mode){
             SendInput "#v"
         }
         else{
-            SendText "b"
+            SendInput "b"
         }
     }
 
-    x::{
+    $x::{
         if (edit_mode){
             SendInput "^x"
         }
         else{
-            SendText "x"
+            SendInput "x"
         }
     }
 
@@ -228,87 +333,150 @@ Alt::
     ^,::+Home
     ^.::+End
 
-    ^n::{
-        SendInput "^{Right}"
-        SendInput "^+{Left}"
-        SendInput "^{x}"
+    Control::{
+    global vertical_buffer := 0
+    MakeGui()
+}
+
+^n::{
+    SendInput "^{Right}"
+    SendInput "^+{Left}"
+    SendInput "^{x}"
+}
+^m::{
+    SendInput "{End}"
+    SendInput "+{Home}"
+    SendInput "^{x}"
+    SendInput "{Backspace}"
+}
+
+$1::{
+    if (edit_mode){
+        AddToVBuffer(1)
     }
-    ^m::{
-        SendInput "{End}"
-        SendInput "+{Home}"
-        SendInput "^{x}"
-        SendInput "{Backspace}"
+    else{
+        SendInput "{1}"
     }
-
-    3::3
-    3 & i::MoveCursorUp(3)
-    3 & k::MoveCursorDown(3)
-
-    2::2
-    2 & i::MoveCursorUp(2)
-    2 & k::MoveCursorDown(2)
-
-    4::4
-    4 & i::MoveCursorUp(4)
-    4 & k::MoveCursorDown(4)
-
-    5::5
-    5 & i::MoveCursorUp(5)
-    5 & k::MoveCursorDown(5)
-
-    6::6
-    6 & i::MoveCursorUp(10)
-    6 & k::MoveCursorDown(10)
-
-    MoveCursorUp(Count) {
-        Loop Count {
-            SendInput "{Up}"
-        }
+}
+$2::{
+    if (edit_mode){
+        AddToVBuffer(2)
     }
-
-    MoveCursorDown(Count) {
-        Loop Count {
-            SendInput "{Down}"
-        }
+    else{
+        SendInput "{2}"
     }
+}
+$3::{
+    if (edit_mode){
+        AddToVBuffer(3)
+    }
+    else{
+        SendInput "{3}"
+    }
+}
+$4::{
+    if (edit_mode){
+        AddToVBuffer(4)
+    }
+    else{
+        SendInput "{4}"
+    }
+}
+$5::{
+    if (edit_mode){
+        AddToVBuffer(5)
+    }
+    else{
+        SendInput "{5}"
+    }
+}
+$6::{
+    if (edit_mode){
+        AddToVBuffer(10)
+    }
+    else{
+        SendInput "{6}"
+    }
+}
+$7::{
+    if (edit_mode){
+        AddToVBuffer(15)
+    }
+    else{
+        SendInput "{7}"
+    }
+}
+$8::{
+    if (edit_mode){
+       SendInput "{PgUp}"
+    }
+    else{
+        SendInput "{8}"
+    }
+}
+$9::{
+    if (edit_mode){
+       SendInput "{PgDn}"
+    }
+    else{
+        SendInput "{9}"
+    }
+}
+AddToVBuffer(Count){
+    global vertical_buffer := vertical_buffer + Count
 
-    ; ^g::{
+    MakeGui()
+}
 
-    ;     MsgBox "The active window is '" WinGetID("A") "'."
+MoveCursorUp(Count) {
+    Loop Count {
+        SendInput "{Up}"
+    }
+}
 
-    ;     MsgBox "Tittle is '" WinGetProcessName("A") "'."
-    ; }
+MoveCursorDown(Count) {
+    Loop Count {
+        SendInput "{Down}"
+    }
+}
 
-    !t::{
-        currWindow := WinGetProcessName("A")
-        ;shift alt c
-        if(currWindow = "explorer.exe"){
-            res := ControlGetText("ToolbarWindow324", WinGetTitle("A"))
-            finalStr := ""
-            dist := StrSplit(res,' ')
-            for w, s in dist{
-                if(w != 1){
-                    if(finalStr != "")
-                        finalStr := finalStr . " " . s
-                    else
-                        finalStr := s
-                }
+; ^g::{
+
+;     MsgBox "The active window is '" WinGetID("A") "'."
+
+;     MsgBox "Tittle is '" WinGetProcessName("A") "'."
+; }
+
+!t::{
+    currWindow := WinGetProcessName("A")
+    ;shift alt c
+    if(currWindow = "explorer.exe"){
+        res := ControlGetText("ToolbarWindow324", WinGetTitle("A"))
+        finalStr := ""
+        dist := StrSplit(res,' ')
+        for w, s in dist{
+            if(w != 1){
+                if(finalStr != "")
+                    finalStr := finalStr . " " . s
+                else
+                    finalStr := s
             }
-            ; MsgBox finalStr
+        }
+        ; MsgBox finalStr
 
-            newPath := "`"" StrReplace(finalStr, "\", "/") "`""
-            ; MsgBox newPath
+        newPath := "`"" StrReplace(finalStr, "\", "/") "`""
+        ; MsgBox newPath
 
-            finalCmd := "C:\\WINDOWS\\system32\\cmd.exe /K cd " . newPath
-            ; MsgBox finalCmd
-            Run finalCmd
+        finalCmd := "C:\\WINDOWS\\system32\\cmd.exe /K cd " . newPath
+        ; MsgBox finalCmd
+        Run finalCmd
+    }
+    else{
+        if(currWindow = "code.exe"){
+            SendInput "^+{c}"
         }
         else{
-            if(currWindow = "code.exe"){
-                SendInput "^+{c}"
-            }
-            else{
-                Run "C:\WINDOWS\system32\cmd.exe /K cd C://"
-            }
+            Run "C:\WINDOWS\system32\cmd.exe /K cd C://"
         }
     }
+}
