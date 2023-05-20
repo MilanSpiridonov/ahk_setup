@@ -33,6 +33,7 @@ MyGui := Gui()
         {
             WinActivate
         }
+        SendInput "{Esc}"
     }
     j::{
         if (edit_mode){
@@ -81,7 +82,7 @@ MyGui := Gui()
 
     m::{
         if (edit_mode){
-            SendInput "^{Righ}t"
+            SendInput "^{Righ}"
         }
         else{
             SendText "m"
