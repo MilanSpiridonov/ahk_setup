@@ -2,6 +2,7 @@
 edit_mode := False
 MyGui := Gui()
 vertical_buffer := 0
+shift_down := False
 ; Create a hotkey that listens for the Alt key press
 
 SetTimer WatchCursor, 500
@@ -11,7 +12,7 @@ MakeGui()
 WatchCursor()
 {
     MouseGetPos &xpos, &ypos 
-    if(xpos < 150 && ypos < 80){
+    if(xpos < 150 && ypos < 100){
         MyGui.Move(-200, -200, 100, 50)
     }
     else{
@@ -62,7 +63,7 @@ Alt::
             SendInput "+{Left}"
         }
         else{
-            SendInput "${j}"
+            SendInput "+{j}"
         }
     }
     $j::{
