@@ -28,7 +28,7 @@ MakeGui(){
         MyGui.Add("Text",, "Edit Mode")
         MyGui.BackColor := "EEAA99"
         MyGui.Title := "Edit Mode"
-        MyGui.Add("Text",, vertical_buffer)
+        MyGui.Add("Text",, "V_Buffer: " . vertical_buffer)
     }
     else{
         MyGui.Add("Text",, "Text Mode")
@@ -57,12 +57,12 @@ Alt::
         ScreenWidth := A_ScreenWidth
         ScreenHeight := A_ScreenHeight
     }
-    +j::{
+    $+j::{
         if (edit_mode){
             SendInput "+{Left}"
         }
         else{
-            SendText "J"
+            SendInput "${j}"
         }
     }
     $j::{
@@ -70,16 +70,16 @@ Alt::
             SendInput "{Left}"
         }
         else{
-            SendInput "j"
+            SendInput "{j}"
         }
     }
 
-    +l::{
+    $+l::{
         if (edit_mode){
             SendInput "+{Right}"
         }
         else{
-            SendText "L"
+            SendInput "+{l}"
         }
     }
     $l::{
@@ -93,10 +93,10 @@ Alt::
 
         }
         else{
-            SendInput "l"
+            SendInput "{l}"
         }
     }
-    +i::{
+    $+i::{
         if (edit_mode){
             if(vertical_buffer = 0 || vertical_buffer = 1){
                 SendInput "+{Up}"
@@ -111,7 +111,7 @@ Alt::
             }
         }
         else{
-            SendText "I"
+            SendInput "+{i}"
         }
     }
     $i::{
@@ -130,11 +130,11 @@ Alt::
 
         }
         else{
-            SendInput "i"
+            SendInput "{i}"
         }
 
     }
-    +k::{
+    $+k::{
         if (edit_mode){
             if(vertical_buffer = 0 || vertical_buffer = 1){
                 SendInput "+{Down}"
@@ -149,7 +149,7 @@ Alt::
             }
         }
         else{
-            SendText "K"
+            SendInput "+{K}"
         }
     }
     $k::{
@@ -159,6 +159,7 @@ Alt::
                 global vertical_buffer := 0
             }
             else{
+                SendInput "{Down}"
                 Loop vertical_buffer{
                     SendInput "{Down}"
                 }
@@ -167,16 +168,16 @@ Alt::
             }
         }
         else{
-            SendInput "k"
+            SendInput "{k}"
         }
     }
 
-    +n::{
+    $+n::{
         if (edit_mode){
             SendInput "^+{Left}"
         }
         else{
-            SendText "N"
+            SendInput "+{n}"
         }
     }
     $n::{
@@ -184,15 +185,15 @@ Alt::
             SendInput "^{Left}"
         }
         else{
-            SendInput "n"
+            SendInput "{n}"
         }
     }
-    +m::{
+    $+m::{
         if (edit_mode){
             SendInput "^+{Right}"
         }
         else{
-            SendText "M"
+            SendInput "+{m}"
         }
     }
     $m::{
@@ -209,7 +210,7 @@ Alt::
             SendInput "{Delete}"
         }
         else{
-            SendInput "o"
+            SendInput "{o}"
         }
     }
 
@@ -218,7 +219,7 @@ Alt::
             SendInput "{Backspace}"
         }
         else{
-            SendInput "u"
+            SendInput "{u}"
         }
     }
     $`;::{
@@ -226,7 +227,7 @@ Alt::
             SendInput "^{Delete}"
         }
         else{
-            SendInput ";"
+            SendInput "{;}"
         }
     }
     $h::{
@@ -234,7 +235,7 @@ Alt::
             SendInput "^{Backspace}"
         }
         else{
-            SendInput "h"
+            SendInput "{h}"
         }
     }
     $,::{
@@ -242,7 +243,7 @@ Alt::
             SendInput "{Home}"
         }
         else{
-            SendInput ","
+            SendInput "{,}"
         }
     }
     $.::{
@@ -250,12 +251,14 @@ Alt::
             SendInput "{End}"
         }
         else{
-            SendInput "."
+            SendInput "{.}"
         }
     }
     $f::{
         if (edit_mode){
-            SendInput "^f"
+            SendInput "^{f}"
+            global edit_mode := False
+            MakeGui()
         }
         else{
             SendInput "{f}"
@@ -264,10 +267,10 @@ Alt::
 
     $z::{
         if (edit_mode){
-            SendInput "^z"
+            SendInput "^{z}"
         }
         else{
-            SendInput "z"
+            SendInput "{z}"
         }
     }
 
@@ -276,7 +279,7 @@ Alt::
             SendInput "^y"
         }
         else{
-            SendInput "y"
+            SendInput "{y}"
         }
     }
 
@@ -285,7 +288,7 @@ Alt::
             SendInput "^a"
         }
         else{
-            SendInput "a"
+            SendInput "{a}"
         }
     }
 
@@ -294,7 +297,7 @@ Alt::
             SendInput "^s"
         }
         else{
-            SendInput "s"
+            SendInput "{s}"
         }
     }
     $^s::{
@@ -320,7 +323,7 @@ Alt::
             SendInput "^v"
         }
         else{
-            SendInput "v"
+            SendInput "{v}"
         }
     }
 
@@ -329,7 +332,7 @@ Alt::
             SendInput "#v"
         }
         else{
-            SendInput "b"
+            SendInput "{b}"
         }
     }
 
@@ -338,7 +341,7 @@ Alt::
             SendInput "^x"
         }
         else{
-            SendInput "x"
+            SendInput "{x}"
         }
     }
 
