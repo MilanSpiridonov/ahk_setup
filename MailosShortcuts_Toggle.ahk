@@ -1,23 +1,10 @@
-﻿; Define the initial state of the toggle variable
-edit_mode := False
+﻿edit_mode := False
 MyGui := Gui()
 vertical_buffer := 0
 guiShown := True
-; Create a hotkey that listens for the Alt key press
-; SetTimer WatchCursor, 500
 
 MakeGui()
-; WatchCursor()
-; {
-;     MouseGetPos &xpos, &ypos 
-;     if(xpos < 150 && ypos < 100){
-;     ;    MyGui.Move(-200, -200, 100, 50)
-;         ; MyGui.Visible = False ..?
-;     }
-;     else{
-;         MyGui.Move(10, 20, 100, 50)
-;     }
-; }
+
 MakeGui(){
     currWindow := WinGetTitle("A")
     MyGui.Destroy()
@@ -44,7 +31,7 @@ MakeGui(){
     global guiShown := True
 }
 
-+Enter::{
+^Enter::{
     if(guiShown)
         {
             MyGui.Destroy()
@@ -495,13 +482,11 @@ MoveCursorDown(Count) {
                     finalStr := s
             }
         }
-        ; MsgBox finalStr
 
         newPath := "`"" StrReplace(finalStr, "\", "/") "`""
-        ; MsgBox newPath
 
         finalCmd := "C:\\WINDOWS\\system32\\cmd.exe /K cd " . newPath
-        ; MsgBox finalCmd
+
         Run finalCmd
     }
     else{
