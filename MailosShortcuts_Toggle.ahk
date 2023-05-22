@@ -2,21 +2,22 @@
 edit_mode := False
 MyGui := Gui()
 vertical_buffer := 0
+guiShown := True
 ; Create a hotkey that listens for the Alt key press
-SetTimer WatchCursor, 500
+; SetTimer WatchCursor, 500
 
-show_gui := True
 MakeGui()
-WatchCursor()
-{
-    MouseGetPos &xpos, &ypos 
-    if(xpos < 150 && ypos < 100){
-        MyGui.Move(-200, -200, 100, 50)
-    }
-    else{
-        MyGui.Move(10, 20, 100, 50)
-    }
-}
+; WatchCursor()
+; {
+;     MouseGetPos &xpos, &ypos 
+;     if(xpos < 150 && ypos < 100){
+;     ;    MyGui.Move(-200, -200, 100, 50)
+;         ; MyGui.Visible = False ..?
+;     }
+;     else{
+;         MyGui.Move(10, 20, 100, 50)
+;     }
+; }
 MakeGui(){
     currWindow := WinGetTitle("A")
     MyGui.Destroy()
@@ -40,10 +41,18 @@ MakeGui(){
     {
         WinActivate
     }
+    global guiShown := True
 }
 
-!Enter::{
-
++Enter::{
+    if(guiShown)
+        {
+            MyGui.Destroy()
+            global guiShown := False
+        }
+        else{
+            MakeGui()
+        }
 }
 
 Alt::
