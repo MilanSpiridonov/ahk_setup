@@ -2,9 +2,7 @@
 edit_mode := False
 MyGui := Gui()
 vertical_buffer := 0
-shift_down := False
 ; Create a hotkey that listens for the Alt key press
-
 SetTimer WatchCursor, 500
 
 show_gui := True
@@ -42,6 +40,10 @@ MakeGui(){
     {
         WinActivate
     }
+}
+
+!Enter::{
+
 }
 
 Alt::
