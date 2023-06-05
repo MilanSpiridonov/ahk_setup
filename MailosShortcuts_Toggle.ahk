@@ -10,7 +10,7 @@ MakeGui(){
     MyGui.Destroy()
     global MyGui := Gui()
     MyGui.Opt("+ToolWindow +LastFound +AlwaysOnTop -Caption")
-   
+
     if(edit_mode){
         MyGui.Add("Text",, "Edit Mode")
         MyGui.BackColor := "EEAA99"
@@ -33,13 +33,13 @@ MakeGui(){
 
 ^Enter::{
     if(guiShown)
-        {
-            MyGui.Destroy()
-            global guiShown := False
-        }
-        else{
-            MakeGui()
-        }
+    {
+        MyGui.Destroy()
+        global guiShown := False
+    }
+    else{
+        MakeGui()
+    }
 }
 
 Alt::
@@ -103,7 +103,8 @@ Alt::
             }
             else{
                 Loop vertical_buffer{
-                    SendInput "+{Up}"
+                    Send "+{Up}"
+                    Sleep 1
                 }
                 global vertical_buffer := 0
                 MakeGui()
@@ -121,7 +122,8 @@ Alt::
             }
             else{
                 Loop vertical_buffer{
-                    SendInput "{Up}"
+                    Send "{Up}"
+                    Sleep 1
                 }
                 global vertical_buffer := 0
                 MakeGui()
@@ -141,7 +143,8 @@ Alt::
             }
             else{
                 Loop vertical_buffer{
-                    SendInput "+{Down}"
+                    Send "+{Down}"
+                    Sleep 1
                 }
                 global vertical_buffer := 0
                 MakeGui()
@@ -160,7 +163,8 @@ Alt::
             else{
                 SendInput "{Down}"
                 Loop vertical_buffer{
-                    SendInput "{Down}"
+                    Send "{Down}"
+                    Sleep 1
                 }
                 global vertical_buffer := 0
                 MakeGui()
@@ -299,14 +303,6 @@ Alt::
             SendInput "{s}"
         }
     }
-    $^s::{
-        if(edit_mode){
-            SendInput "{PrintScreen}"
-        }
-        else{
-            SendInput "^{s}"
-        }
-    }
 
     $c::{
         if (edit_mode){
@@ -354,8 +350,12 @@ Alt::
     ^.::+End
 
     Control::{
-    global vertical_buffer := 0
-    MakeGui()
+    if(guiShown) {
+        if(edit_mode){
+            global vertical_buffer := 0
+            MakeGui()
+        }
+    }
 }
 
 ^n::{
@@ -428,7 +428,7 @@ $7::{
 }
 $8::{
     if (edit_mode){
-        SendInput "{PgUp}"
+        SendInput "{PgDn}"
     }
     else{
         SendInput "{8}"
@@ -436,7 +436,7 @@ $8::{
 }
 $9::{
     if (edit_mode){
-        SendInput "{PgDn}"
+        SendInput "{PgUp}"
     }
     else{
         SendInput "{9}"
@@ -498,3 +498,4 @@ MoveCursorDown(Count) {
         }
     }
 }
+
